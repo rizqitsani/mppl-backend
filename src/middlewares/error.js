@@ -5,6 +5,7 @@ const ApiError = require('../errors/ApiError');
  * Error handler. Send stacktrace only during development
  * @public
  */
+// eslint-disable-next-line no-unused-vars
 const handler = (err, req, res, next) => {
   const response = {
     code: err.status,
@@ -26,6 +27,7 @@ exports.handler = handler;
  * If error is not an instanceOf ApiError, convert it.
  * @public
  */
+// eslint-disable-next-line no-unused-vars
 exports.converter = (err, req, res, next) => {
   let convertedError = err;
 
@@ -44,6 +46,7 @@ exports.converter = (err, req, res, next) => {
  * Catch 404 and forward to error handler
  * @public
  */
+// eslint-disable-next-line no-unused-vars
 exports.notFound = (req, res, next) => {
   const err = new ApiError({
     message: 'Not found',
