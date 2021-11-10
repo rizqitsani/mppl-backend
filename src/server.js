@@ -12,7 +12,8 @@ app.use(express.json());
 app.use(helmet());
 app.use(cors());
 
-db.authenticate()
+db.sequelize
+  .authenticate()
   .then(() => {
     // eslint-disable-next-line no-console
     console.log('Connection has been established successfully.');
