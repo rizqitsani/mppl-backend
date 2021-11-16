@@ -1,35 +1,51 @@
+const { hashPassword } = require('../utils/auth');
+
 module.exports = (sequelize, Sequelize) => {
   const User = sequelize.define(
     'User',
     {
-      us_id: {
-        type: Sequelize.INTEGER,
+      id: {
+        type: Sequelize.STRING(21),
         primaryKey: true,
-        autoIncrement: true,
       },
-      us_nama: {
+      full_name: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      us_no_hp: {
+      telephone: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      us_alamat: {
+      address: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      us_email: {
+      email: {
         type: Sequelize.STRING,
         unique: true,
         allowNull: false,
       },
-      us_password: {
+      password: {
         type: Sequelize.STRING,
         allowNull: false,
       },
     },
-    { tableName: 'users' },
+    {
+      tableName: 'user',
+      timestamps: true,
+      createdAt: 'created_at',
+      updatedAt: 'updated_at',
+      hooks: {
+        beforeCreate: async (atttributes) => {
+          if (atttributes.us_password) {
+            // eslint-disable-next-line no-param-reassign
+            atttributes.us_password = await hashPassword(
+              atttributes.us_password,
+            );
+          }
+        },
+      },
+    },
   );
 
   return User;
