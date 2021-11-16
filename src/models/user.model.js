@@ -37,11 +37,9 @@ module.exports = (sequelize, Sequelize) => {
       updatedAt: 'updated_at',
       hooks: {
         beforeCreate: async (atttributes) => {
-          if (atttributes.us_password) {
+          if (atttributes.password) {
             // eslint-disable-next-line no-param-reassign
-            atttributes.us_password = await hashPassword(
-              atttributes.us_password,
-            );
+            atttributes.password = await hashPassword(atttributes.password);
           }
         },
       },
