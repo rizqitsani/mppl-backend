@@ -1,3 +1,5 @@
+const config = require('.');
+
 module.exports = {
   development: {
     username: 'root',
@@ -14,10 +16,10 @@ module.exports = {
     dialect: 'mysql',
   },
   production: {
-    username: process.env.USERNAME_DB,
-    password: process.env.PASSWORD_DB,
-    database: process.env.DATABASE_NAME,
-    host: process.env.HOST_DB,
-    dialect: process.env.DIALECT,
+    username: config.database.username,
+    password: config.database.password,
+    database: config.database.name,
+    host: config.database.host,
+    dialect: config.database.dialect,
   },
 };

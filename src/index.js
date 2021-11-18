@@ -1,11 +1,9 @@
-require('dotenv').config();
+const config = require('./config');
 const server = require('./server');
 
-server.listen(process.env.PORT, () => {
+server.listen(config.port, () => {
   // eslint-disable-next-line no-console
-  console.log(
-    `Server started on port ${process.env.PORT} (${process.env.NODE_ENV})`,
-  );
+  console.log(`Server started on port ${config.port} (${config.env})`);
 });
 
 module.exports = server;

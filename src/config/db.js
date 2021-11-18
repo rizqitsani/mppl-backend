@@ -3,8 +3,9 @@ const fs = require('fs');
 const { createRequire } = require('module');
 const { Sequelize } = require('sequelize');
 const dbConfig = require('./dbConfig');
+const configVars = require('.');
 
-const config = dbConfig[process.env.NODE_ENV || 'development'];
+const config = dbConfig[configVars.env];
 const modelDir = path.join(__dirname, '../models');
 
 const sequelize = new Sequelize(

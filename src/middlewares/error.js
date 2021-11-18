@@ -1,4 +1,5 @@
 const { StatusCodes } = require('http-status-codes');
+const config = require('../config');
 const ApiError = require('../errors/ApiError');
 
 /**
@@ -14,7 +15,7 @@ const handler = (err, req, res, next) => {
     stack: err.stack,
   };
 
-  if (process.env.NODE_ENV !== 'development') {
+  if (config.env !== 'development') {
     delete response.stack;
   }
 

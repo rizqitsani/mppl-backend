@@ -1,5 +1,6 @@
 const { StatusCodes } = require('http-status-codes');
 const jwt = require('jsonwebtoken');
+const config = require('../config');
 const db = require('../config/db');
 const ApiError = require('../errors/ApiError');
 
@@ -14,10 +15,10 @@ exports.verifyToken = async (req, res, next) => {
       });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, config.jwtSecret);
 
-    const user = await db.user.findOne({
-      where: { us_id: decoded.id },
+    const user = await db.sequelize.models.User.findOne({
+      where: { id: decoded.id },
     });
 
     req.user = user;

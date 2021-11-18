@@ -2,6 +2,7 @@ const { StatusCodes } = require('http-status-codes');
 const jwt = require('jsonwebtoken');
 const { nanoid } = require('nanoid');
 
+const config = require('../config');
 const db = require('../config/db');
 const ApiError = require('../errors/ApiError');
 const { comparePassword } = require('../utils/auth');
@@ -60,8 +61,8 @@ class AuthService {
   }
 
   createToken(id) {
-    return jwt.sign({ id }, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_EXPIRES_IN,
+    return jwt.sign({ id }, config.jwtSecret, {
+      expiresIn: parseInt(config.jwtExpire, 10),
     });
   }
 }
