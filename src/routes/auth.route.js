@@ -36,16 +36,17 @@ router.route('/register').post(validate(register), async (req, res, next) => {
   }
 });
 
-router.route('/info').post(verifyToken, async (req, res, next) => {
+router.route('/info').get(verifyToken, async (req, res, next) => {
   try {
     return res.status(StatusCodes.OK).json({
       message: 'Success.',
       data: {
-        id: req.user.us_id,
-        name: req.user.us_nama,
-        email: req.user.us_email,
-        phone: req.user.us_no_hp,
-        address: req.user.us_alamat,
+        id: req.user.id,
+        role: req.user.role,
+        name: req.user.full_name,
+        email: req.user.email,
+        phone: req.user.telephone,
+        address: req.user.address,
       },
     });
   } catch (error) {
