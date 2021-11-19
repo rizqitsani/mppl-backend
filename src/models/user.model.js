@@ -8,6 +8,10 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING(21),
         primaryKey: true,
       },
+      role: {
+        type: Sequelize.STRING(8),
+        defaultValue: 'user',
+      },
       full_name: {
         type: Sequelize.STRING,
         allowNull: false,
