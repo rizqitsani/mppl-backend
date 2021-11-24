@@ -4,9 +4,9 @@ const config = require('../config');
 const db = require('../config/db');
 const ApiError = require('../errors/ApiError');
 
-exports.verifyToken = async (req, res, next) => {
+const verifyToken = async (req, res, next) => {
   try {
-    const token = req.headers.authorization.split(' ')[1];
+    const token = req.headers?.authorization?.split(' ')?.[1];
 
     if (!token) {
       throw new ApiError({
@@ -27,4 +27,24 @@ exports.verifyToken = async (req, res, next) => {
   } catch (error) {
     return next(error);
   }
+};
+
+const isAdmin = (req, res, next) => {
+  try {
+    if (req.user.role !== 'admin') {
+      throw new ApiError({
+        status: StatusCodes.FORBIDDEN,
+        message: 'Tidak mempunyai akses!',
+      });
+    }
+
+    return next();
+  } catch (error) {
+    return next(error);
+  }
+};
+
+module.exports = {
+  isAdmin,
+  verifyToken,
 };
