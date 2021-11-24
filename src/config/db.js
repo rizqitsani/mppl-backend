@@ -35,6 +35,9 @@ Object.keys(db).forEach((modelName) => {
   }
 });
 
+db.Product.hasMany(db.ProductPhoto, { as: 'photos', foreignKey: 'product_id' });
+db.ProductPhoto.belongsTo(db.Product, { foreignKey: 'product_id' });
+
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
