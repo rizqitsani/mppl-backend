@@ -38,6 +38,12 @@ Object.keys(db).forEach((modelName) => {
 db.Product.hasMany(db.ProductPhoto, { as: 'photos', foreignKey: 'product_id' });
 db.ProductPhoto.belongsTo(db.Product, { foreignKey: 'product_id' });
 
+db.User.hasMany(db.Cart, { foreignKey: 'user_id' });
+db.Cart.belongsTo(db.User, { as: 'user', foreignKey: 'user_id' });
+
+db.Product.hasMany(db.Cart, { foreignKey: 'product_id' });
+db.Cart.belongsTo(db.Product, { as: 'product', foreignKey: 'product_id' });
+
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
