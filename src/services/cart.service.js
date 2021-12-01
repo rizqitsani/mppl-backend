@@ -62,6 +62,13 @@ class CartService {
     });
     return isDeleted;
   }
+
+  async deleteCartByUserId(userId) {
+    const isDeleted = await this.Cart.destroy({
+      where: { user_id: userId },
+    });
+    return isDeleted;
+  }
 }
 
 module.exports = CartService;
