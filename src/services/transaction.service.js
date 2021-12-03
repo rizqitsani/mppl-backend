@@ -1,18 +1,86 @@
-const { nanoid } = require('nanoid');
+const { nanoid, customAlphabet } = require('nanoid');
 const db = require('../config/db');
 
 class TransactionService {
   constructor() {
     this.Transaction = db.sequelize.models.Transaction;
     this.TransactionDetail = db.sequelize.models.TransactionDetail;
+    this.Product = db.sequelize.models.Product;
+  }
+
+  async getAllTransactions() {
+    const transactions = await this.Transaction.findAll({
+      include: [
+        {
+          model: this.TransactionDetail,
+          as: 'items',
+          attributes: ['id', 'quantity'],
+          include: [
+            {
+              model: this.Product,
+              as: 'product',
+              attributes: ['id', 'name', 'price'],
+            },
+          ],
+        },
+      ],
+    });
+    return transactions;
+  }
+
+  async getTransactionsByUserId(userId) {
+    const transactions = await this.Transaction.findAll({
+      include: [
+        {
+          model: this.TransactionDetail,
+          as: 'items',
+          attributes: ['id', 'quantity'],
+          include: [
+            {
+              model: this.Product,
+              as: 'product',
+              attributes: ['id', 'name', 'price'],
+            },
+          ],
+        },
+      ],
+      where: {
+        user_id: userId,
+      },
+    });
+    return transactions;
+  }
+
+  async getTransactionDetails(id) {
+    const transaction = await this.Transaction.findOne({
+      include: [
+        {
+          model: this.TransactionDetail,
+          as: 'items',
+          attributes: ['id', 'quantity'],
+          include: [
+            {
+              model: this.Product,
+              as: 'product',
+              attributes: ['id', 'name', 'price'],
+            },
+          ],
+        },
+      ],
+      where: { id },
+    });
+    return transaction;
   }
 
   async addTransaction(userId, cost) {
+    const nano = customAlphabet('123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', 10);
     const transaction = await this.Transaction.create({
-      id: nanoid(),
+      id: nano(),
       user_id: userId,
       total: cost.total,
-      additional_cost: cost.additional,
+      shipping_cost: cost.shipping,
+      insurance_cost: cost.insurance,
+      shipment_status: 'Belum dibayar',
     });
     return transaction;
   }
@@ -34,12 +102,23 @@ class TransactionService {
         midtrans_id: details.transaction_id,
         payment_type: details.payment_type,
         transaction_status: details.transaction_status,
+        shipment_status: details.settlement_time ? 'Dikemas' : 'Belum dibayar',
         fraud_status: details.fraud_status,
         transaction_time: details.transaction_time,
         settlement_time: details.settlement_time,
       },
       { where: { id: details.order_id } },
     );
+  }
+
+  async updateShipmentStatus(transactionId, status) {
+    const [isUpdated] = await this.Transaction.update(
+      {
+        shipment_status: status,
+      },
+      { where: { id: transactionId } },
+    );
+    return isUpdated;
   }
 
   async getUserIdFromTransaction(transactionId) {
@@ -50,9 +129,9 @@ class TransactionService {
     return userId;
   }
 
-  async deleteTransaction(transactionId) {
+  async deleteTransaction(transactionId, userId) {
     const isDeleted = await this.Transaction.destroy({
-      where: { id: transactionId },
+      where: { id: transactionId, user_id: userId },
     });
     return isDeleted;
   }
