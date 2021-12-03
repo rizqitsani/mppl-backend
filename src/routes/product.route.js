@@ -1,6 +1,7 @@
 const express = require('express');
 const { StatusCodes } = require('http-status-codes');
 
+const { imageUpload } = require('../config/multer');
 const ApiError = require('../errors/ApiError');
 const { verifyToken, isAdmin } = require('../middlewares/auth');
 const validate = require('../middlewares/validate');
@@ -30,10 +31,14 @@ router
   })
   .post(
     [verifyToken, isAdmin],
+    imageUpload.array('image', 4),
     validate(addProduct),
     async (req, res, next) => {
       try {
-        const product = await productServiceInstance.addProduct(req.body);
+        const product = await productServiceInstance.addProduct(
+          req.body,
+          req.files,
+        );
 
         return res
           .status(StatusCodes.OK)
@@ -67,6 +72,7 @@ router
   })
   .put(
     [verifyToken, isAdmin],
+    imageUpload.array('image', 4),
     validate(updateProduct),
     async (req, res, next) => {
       try {
@@ -74,6 +80,7 @@ router
         const isUpdated = await productServiceInstance.updateProduct(
           id,
           req.body,
+          req.files,
         );
 
         if (!isUpdated) {
