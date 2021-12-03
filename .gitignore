@@ -46,3 +46,6 @@ app.**.yaml
 # production configuration
 app.prod.yaml
 gcpCorsConfig.json
+
+# uploads
+/uploads
