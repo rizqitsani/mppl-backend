@@ -19,11 +19,15 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      additional_cost: { type: Sequelize.INTEGER, allowNull: false },
+      shipping_cost: { type: Sequelize.INTEGER, allowNull: false },
+      insurance_cost: { type: Sequelize.INTEGER, allowNull: false },
       payment_type: {
         type: Sequelize.STRING,
       },
       transaction_status: {
+        type: Sequelize.STRING,
+      },
+      shipment_status: {
         type: Sequelize.STRING,
       },
       fraud_status: {
@@ -34,6 +38,16 @@ module.exports = {
       },
       settlement_time: {
         type: Sequelize.DATE,
+      },
+      created_at: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.fn('NOW'),
+      },
+      updated_at: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.fn('NOW'),
       },
     });
   },
