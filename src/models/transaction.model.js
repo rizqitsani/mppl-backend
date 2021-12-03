@@ -20,11 +20,15 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      additional_cost: { type: Sequelize.INTEGER, allowNull: false },
+      shipping_cost: { type: Sequelize.INTEGER, allowNull: false },
+      insurance_cost: { type: Sequelize.INTEGER, allowNull: false },
       payment_type: {
         type: Sequelize.STRING,
       },
       transaction_status: {
+        type: Sequelize.STRING,
+      },
+      shipment_status: {
         type: Sequelize.STRING,
       },
       fraud_status: {
@@ -39,7 +43,9 @@ module.exports = (sequelize, Sequelize) => {
     },
     {
       tableName: 'transaction',
-      timestamps: false,
+      timestamps: true,
+      createdAt: 'created_at',
+      updatedAt: 'updated_at',
     },
   );
 
