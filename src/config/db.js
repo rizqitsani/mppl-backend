@@ -52,6 +52,12 @@ db.TransactionDetail.belongsTo(db.Transaction, {
   foreignKey: 'transaction_id',
 });
 
+db.Product.hasMany(db.TransactionDetail, { foreignKey: 'product_id' });
+db.TransactionDetail.belongsTo(db.Product, {
+  as: 'product',
+  foreignKey: 'product_id',
+});
+
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
