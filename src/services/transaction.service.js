@@ -6,6 +6,7 @@ class TransactionService {
     this.Transaction = db.sequelize.models.Transaction;
     this.TransactionDetail = db.sequelize.models.TransactionDetail;
     this.Product = db.sequelize.models.Product;
+    this.ProductPhoto = db.sequelize.models.ProductPhoto;
   }
 
   async getAllTransactions() {
@@ -20,6 +21,13 @@ class TransactionService {
               model: this.Product,
               as: 'product',
               attributes: ['id', 'name', 'price'],
+              include: [
+                {
+                  model: this.ProductPhoto,
+                  as: 'photos',
+                  attributes: ['id', 'photo_link'],
+                },
+              ],
             },
           ],
         },
@@ -40,6 +48,13 @@ class TransactionService {
               model: this.Product,
               as: 'product',
               attributes: ['id', 'name', 'price'],
+              include: [
+                {
+                  model: this.ProductPhoto,
+                  as: 'photos',
+                  attributes: ['id', 'photo_link'],
+                },
+              ],
             },
           ],
         },

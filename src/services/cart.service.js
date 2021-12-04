@@ -5,6 +5,7 @@ class CartService {
   constructor() {
     this.Cart = db.sequelize.models.Cart;
     this.Product = db.sequelize.models.Product;
+    this.ProductPhoto = db.sequelize.models.ProductPhoto;
   }
 
   async getAllCartsByUserId(userId) {
@@ -14,6 +15,13 @@ class CartService {
           model: this.Product,
           as: 'product',
           attributes: ['name', 'price'],
+          include: [
+            {
+              model: this.ProductPhoto,
+              as: 'photos',
+              attributes: ['id', 'photo_link'],
+            },
+          ],
         },
       ],
       where: {

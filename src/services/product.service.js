@@ -34,6 +34,11 @@ class ProductService {
 
   async findProductById(id) {
     const product = await this.Product.findOne({
+      include: {
+        model: this.ProductPhoto,
+        as: 'photos',
+        attributes: ['id', 'photo_link'],
+      },
       where: { id },
     });
     return product;
