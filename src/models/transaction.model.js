@@ -25,10 +25,13 @@ module.exports = (sequelize, Sequelize) => {
       payment_type: {
         type: Sequelize.STRING,
       },
+      transaction_type: {
+        type: Sequelize.STRING,
+      },
       transaction_status: {
         type: Sequelize.STRING,
       },
-      shipment_status: {
+      shipping_status: {
         type: Sequelize.STRING,
       },
       fraud_status: {

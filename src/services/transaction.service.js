@@ -20,7 +20,7 @@ class TransactionService {
             {
               model: this.Product,
               as: 'product',
-              attributes: ['id', 'name', 'price'],
+              attributes: ['id', 'name', 'price', 'stock'],
               include: [
                 {
                   model: this.ProductPhoto,
@@ -47,7 +47,7 @@ class TransactionService {
             {
               model: this.Product,
               as: 'product',
-              attributes: ['id', 'name', 'price'],
+              attributes: ['id', 'name', 'price', 'stock'],
               include: [
                 {
                   model: this.ProductPhoto,
@@ -77,7 +77,7 @@ class TransactionService {
             {
               model: this.Product,
               as: 'product',
-              attributes: ['id', 'name', 'price'],
+              attributes: ['id', 'name', 'price', 'stock'],
             },
           ],
         },
@@ -87,15 +87,16 @@ class TransactionService {
     return transaction;
   }
 
-  async addTransaction(userId, cost) {
+  async addTransaction(userId, data) {
     const nano = customAlphabet('123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', 10);
     const transaction = await this.Transaction.create({
       id: nano(),
       user_id: userId,
-      total: cost.total,
-      shipping_cost: cost.shipping,
-      insurance_cost: cost.insurance,
-      shipment_status: 'Belum dibayar',
+      total: data.total,
+      transaction_type: data.type,
+      shipping_cost: data.shipping,
+      insurance_cost: data.insurance,
+      shipping_status: 'Belum dibayar',
     });
     return transaction;
   }
@@ -117,7 +118,7 @@ class TransactionService {
         midtrans_id: details.transaction_id,
         payment_type: details.payment_type,
         transaction_status: details.transaction_status,
-        shipment_status: details.settlement_time ? 'Dikemas' : 'Belum dibayar',
+        shipping_status: details.settlement_time ? 'Dikemas' : 'Belum dibayar',
         fraud_status: details.fraud_status,
         transaction_time: details.transaction_time,
         settlement_time: details.settlement_time,
@@ -129,7 +130,7 @@ class TransactionService {
   async updateShipmentStatus(transactionId, status) {
     const [isUpdated] = await this.Transaction.update(
       {
-        shipment_status: status,
+        shipping_status: status,
       },
       { where: { id: transactionId } },
     );
