@@ -14,7 +14,7 @@ class CartService {
         {
           model: this.Product,
           as: 'product',
-          attributes: ['name', 'price'],
+          attributes: ['name', 'price', 'stock'],
           include: [
             {
               model: this.ProductPhoto,

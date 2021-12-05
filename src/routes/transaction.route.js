@@ -49,7 +49,7 @@ router
   .post(verifyToken, validate(getToken), async (req, res, next) => {
     try {
       const { user } = req;
-      const { total, shipping, insurance } = req.body;
+      const { total, shipping, insurance, type } = req.body;
 
       const cart = await cartServiceInstance.getAllCartsByUserId(user.id);
 
@@ -66,6 +66,7 @@ router
           total,
           shipping,
           insurance,
+          type,
         },
       );
 
