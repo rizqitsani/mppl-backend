@@ -70,6 +70,12 @@ class ProductService {
     });
     return isDeleted;
   }
+
+  async getStatistics() {
+    const active = await this.Product.count({ where: { available: true } });
+    const non = await this.Product.count({ where: { available: false } });
+    return { active, non };
+  }
 }
 
 module.exports = ProductService;

@@ -151,6 +151,11 @@ class TransactionService {
     });
     return isDeleted;
   }
+
+  async getStatistics() {
+    const stats = await this.Transaction.sum('total');
+    return stats;
+  }
 }
 
 module.exports = TransactionService;

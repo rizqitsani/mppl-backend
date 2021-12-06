@@ -12,6 +12,11 @@ class UserService {
 
     return user;
   }
+
+  async getStatistics() {
+    const stats = await this.User.count();
+    return stats;
+  }
 }
 
 module.exports = UserService;
