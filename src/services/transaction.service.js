@@ -32,6 +32,7 @@ class TransactionService {
           ],
         },
       ],
+      order: [['transaction_time', 'DESC']],
     });
     return transactions;
   }
@@ -62,6 +63,7 @@ class TransactionService {
       where: {
         user_id: userId,
       },
+      order: [['transaction_time', 'DESC']],
     });
     return transactions;
   }
