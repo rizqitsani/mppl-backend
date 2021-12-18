@@ -35,6 +35,9 @@ Object.keys(db).forEach((modelName) => {
   }
 });
 
+db.User.hasMany(db.RefreshToken, { foreignKey: 'user_id' });
+db.RefreshToken.belongsTo(db.User, { foreignKey: 'user_id' });
+
 db.Product.hasMany(db.ProductPhoto, { as: 'photos', foreignKey: 'product_id' });
 db.ProductPhoto.belongsTo(db.Product, { foreignKey: 'product_id' });
 
