@@ -12,6 +12,8 @@ const UserService = require('./user.service');
 class AuthService {
   constructor() {
     this.User = db.sequelize.models.User;
+    this.RefreshToken = db.sequelize.models.RefreshToken;
+
     this.UserService = new UserService();
   }
 
@@ -38,8 +40,9 @@ class AuthService {
     }
 
     const token = this.createToken(user.id);
+    const refreshToken = await this.RefreshToken.createToken(user);
 
-    return token;
+    return { token, refreshToken };
   }
 
   async register(userData) {
@@ -58,6 +61,32 @@ class AuthService {
     });
 
     return data;
+  }
+
+  async verifyRefreshToken(requestToken) {
+    const refreshToken = await this.RefreshToken.findOne({
+      where: { token: requestToken },
+    });
+
+    if (!refreshToken) {
+      throw new ApiError({
+        status: StatusCodes.FORBIDDEN,
+        message: 'Refresh token tidak terdaftar!',
+      });
+    }
+
+    if (this.RefreshToken.verifyExpiration(refreshToken)) {
+      this.RefreshToken.destroy({ where: { id: refreshToken.id } });
+
+      throw new ApiError({
+        status: StatusCodes.FORBIDDEN,
+        message: 'Refresh token expired!',
+      });
+    }
+
+    const newToken = this.createToken(refreshToken.user_id);
+
+    return newToken;
   }
 
   createToken(id) {
