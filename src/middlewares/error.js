@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const { StatusCodes } = require('http-status-codes');
 const config = require('../config');
 const ApiError = require('../errors/ApiError');
@@ -32,7 +33,13 @@ exports.handler = handler;
 exports.converter = (err, req, res, next) => {
   let convertedError = err;
 
-  if (!(err instanceof ApiError)) {
+  if (err instanceof jwt.TokenExpiredError) {
+    convertedError = new ApiError({
+      message: 'JWT expired!',
+      status: err.status,
+      stack: err.stack,
+    });
+  } else if (!(err instanceof ApiError)) {
     convertedError = new ApiError({
       message: err.message,
       status: err.status,
